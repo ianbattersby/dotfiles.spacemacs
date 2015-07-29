@@ -31,51 +31,51 @@
 ;; https://github.com/jwiegley/use-package
 
 (defun my-csharp/init-omnisharp-emacs ()
-    "Initialize my extension"
-    (require 'omnisharp)
-    (setq omnisharp-server-executable-path
-          "~/code/omnisharp-roslyn/scripts/Omnisharp")
-    (setq omnisharp-debug 't)
-    (eval-after-load 'company
-      '(add-to-list 'company-backends 'company-omnisharp)))
-
-(defun my-csharp/post-init-omnisharp-emacs()
-  (add-hook 'csharp-mode-hook 'omnisharp-mode)
-  (evil-leader/set-key-for-mode 'csharp-mode
-    ;; Compile
-    "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
-    ;; Solution/project manipulation
-    "mfa" 'omnisharp-add-to-solution-current-file
-    "mfA" 'omnisharp-add-to-solution-dired-selected-files
-    "mfr" 'omnisharp-remove-from-project-current-file
-    "mfR" 'omnisharp-remove-from-project-dired-selected-files
-    "mpl" 'omnisharp-add-reference
-    ;; Navigation
-    "mgg" 'omnisharp-go-to-definition
-    "mgG" 'omnisharp-go-to-definition-other-window
-    "mgu" 'omnisharp-helm-find-usages
-    "mgs" 'omnisharp-helm-find-symbols
-    "mgi" 'omnisharp-find-implementations
-    "mgr" 'omnisharp-navigate-to-region
-    "mgm" 'omnisharp-navigate-to-solution-member
-    "mgM" 'omnisharp-navigate-to-solution-member-other-window
-    "mgf" 'omnisharp-navigate-to-solution-file
-    "mgF" 'omnisharp-navigate-to-solution-file-then-file-member
-    ;; Help, documentation, info
-    "mht" 'omnisharp-current-type-information
-    "mhT" 'omnisharp-current-type-information-to-kill-ring
-    ;; Refactoring
-    "mrm" 'omnisharp-rename
-    "mrr" 'omnisharp-run-code-action-refactoring
-    ;; Server manipulation, inspired spacemacs REPL bindings since C# does not provice a REPL
-    "mss" 'omnisharp-start-omnisharp-server
-    "msS" 'omnisharp-stop-server
-    "msr" 'omnisharp-reload-solution
-    ;; Tests
-    "mta" 'omnisharp-unit-test-all
-    "mtb" 'omnisharp-unit-test-fixture
-    "mtt" 'omnisharp-unit-test-single
-    ;; Code manipulation
-    "mu" 'omnisharp-auto-complete-overrides
-    "mi" 'omnisharp-fix-usings
-    "m=" 'omnisharp-code-format))
+  "Initialize my extension"
+  (use-package omnisharp
+       :init
+        (setq omnisharp-debug 't)
+        (setq omnisharp-server-executable-path
+             "~/code/omnisharp-roslyn/scripts/Omnisharp")
+        (eval-after-load 'company
+           '(add-to-list 'company-backends 'company-omnisharp))
+       :config
+        (add-hook 'csharp-mode-hook 'omnisharp-mode)
+        (evil-leader/set-key-for-mode 'csharp-mode
+            ;; Compile
+            "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
+            ;; Solution/project manipulation
+            "mfa" 'omnisharp-add-to-solution-current-file
+            "mfA" 'omnisharp-add-to-solution-dired-selected-files
+            "mfr" 'omnisharp-remove-from-project-current-file
+            "mfR" 'omnisharp-remove-from-project-dired-selected-files
+            "mpl" 'omnisharp-add-reference
+            ;; Navigation
+            "mgg" 'omnisharp-go-to-definition
+            "mgG" 'omnisharp-go-to-definition-other-window
+            "mgu" 'omnisharp-helm-find-usages
+            "mgs" 'omnisharp-helm-find-symbols
+            "mgi" 'omnisharp-find-implementations
+            "mgr" 'omnisharp-navigate-to-region
+            "mgm" 'omnisharp-navigate-to-solution-member
+            "mgM" 'omnisharp-navigate-to-solution-member-other-window
+            "mgf" 'omnisharp-navigate-to-solution-file
+            "mgF" 'omnisharp-navigate-to-solution-file-then-file-member
+            ;; Help, documentation, info
+            "mht" 'omnisharp-current-type-information
+            "mhT" 'omnisharp-current-type-information-to-kill-ring
+            ;; Refactoring
+            "mrm" 'omnisharp-rename
+            "mrr" 'omnisharp-run-code-action-refactoring
+            ;; Server manipulation, inspired spacemacs REPL bindings since C# does not provice a REPL
+            "mss" 'omnisharp-start-omnisharp-server
+            "msS" 'omnisharp-stop-server
+            "msr" 'omnisharp-reload-solution
+            ;; Tests
+            "mta" 'omnisharp-unit-test-all
+            "mtb" 'omnisharp-unit-test-fixture
+            "mtt" 'omnisharp-unit-test-single
+            ;; Code manipulation
+            "mu" 'omnisharp-auto-complete-overrides
+            "mi" 'omnisharp-fix-usings
+            "m=" 'omnisharp-code-format)))
