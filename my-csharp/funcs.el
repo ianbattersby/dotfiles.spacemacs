@@ -8,3 +8,6 @@
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
+(defun use-omnisharp-package-for-development()
+  (interactive)
+  (load-file "/home/ian/code/omnisharp-emacs/test/buttercup-tests/setup.el"))

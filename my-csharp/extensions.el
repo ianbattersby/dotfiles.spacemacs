@@ -17,6 +17,7 @@
 (setq my-csharp-post-extensions
       '(
         ;; post extension names go here
+        omnisharp-emacs
         ))
 
 ;; For each extension, define a function my-csharp/init-<extension-name>
@@ -28,3 +29,13 @@
 ;; Often the body of an initialize function uses `use-package'
 ;; For more info on `use-package', see readme:
 ;; https://github.com/jwiegley/use-package
+
+(defun my-csharp/init-omnisharp-emacs()
+  (defun omnisharp-emacs/init-omnisharp-emacs ()
+    "Initialize my extension"
+    (require 'omnisharp)
+    (setq omnisharp-server-executable-path
+          "~/code/omnisharp-roslyn/scripts/Omnisharp")
+    (setq omnisharp-debug 't)
+    (eval-after-load 'company
+      '(add-to-list 'company-backends 'company-omnisharp))))
