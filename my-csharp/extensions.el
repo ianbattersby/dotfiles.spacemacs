@@ -40,5 +40,4 @@
       ;;(load-file "/home/ian/code/omnisharp-emacs/test/buttercup-tests/setup.el"))
     :init
       (add-to-list 'load-path "/home/ian/code/omnisharp-emacs/")
-      (require 'omnisharp)
-      (use-omnisharp-package-for-development))
+      (require 'omnisharp))
