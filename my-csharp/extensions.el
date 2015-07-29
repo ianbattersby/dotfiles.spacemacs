@@ -30,15 +30,14 @@
 ;; For more info on `use-package', see readme:
 ;; https://github.com/jwiegley/use-package
 
-(defun my-csharp/init-omnisharp-emacs()
-  (defun omnisharp-emacs/init-omnisharp-emacs ()
+(defun my-csharp/init-omnisharp-emacs ()
     "Initialize my extension"
     (require 'omnisharp)
     (setq omnisharp-server-executable-path
           "~/code/omnisharp-roslyn/scripts/Omnisharp")
     (setq omnisharp-debug 't)
     (eval-after-load 'company
-      '(add-to-list 'company-backends 'company-omnisharp))))
+      '(add-to-list 'company-backends 'company-omnisharp)))
 
 (defun my-csharp/post-init-omnisharp-emacs()
   (add-hook 'csharp-mode-hook 'omnisharp-mode)
