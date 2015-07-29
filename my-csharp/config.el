@@ -11,4 +11,4 @@
 
 ;; variables
 
-(spacemacs|defvar-company-backends my-csharp-mode)
+(spacemacs|defvar-company-backends csharp-mode)

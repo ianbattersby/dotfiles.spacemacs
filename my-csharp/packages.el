@@ -14,8 +14,14 @@
 (setq my-csharp-packages
     '(
       ;; package names go here
+      csharp-mode
       company
       omnisharp
+      shut-up
+      f
+      s
+      el-mock
+      buttercup
       ))
 
 ;; List of packages to exclude.
@@ -31,13 +37,31 @@
 ;; For more info on `use-package', see readme:
 ;; https://github.com/jwiegley/use-package
 
+(defun my-csharp/init-csharp-mode()
+  (use-package csharp-mode :defer nil))
+
+(defun my-csharp/init-shut-up()
+  (use-package shut-up :defer t))
+
+(defun my-csharp/init-f()
+  (use-package f :defer t))
+
+(defun my-csharp/init-s()
+  (use-package s :defer t))
+
+(defun my-csharp/init-el-mock()
+  (use-package el-mock :defer t))
+
+(defun my-csharp/init-buttercup()
+  (use-package buttercup :defer t))
+
 (defun my-csharp/init-omnisharp ()
-  ;; Load omnisharp-mode with my-csharp-mode, this should start the omnisharp server automatically
-  (add-hook 'my-csharp-mode-hook 'omnisharp-mode)
+  ;; Load omnisharp-mode with csharp-mode, this should start the omnisharp server automatically
+  (add-hook 'csharp-mode-hook 'omnisharp-mode)
   (use-package omnisharp
     :defer t
     :init (push 'company-omnisharp company-backends-csharp-mode)
-    :config (evil-leader/set-key-for-mode 'my-csharp-mode
+    :config (evil-leader/set-key-for-mode 'csharp-mode
               ;; Compile
               "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
               ;; Solution/project manipulation
@@ -78,4 +102,4 @@
 
 (when (configuration-layer/layer-usedp 'auto-completion)
   (defun csharp/post-init-company ()
-    (spacemacs|add-company-hook my-csharp-mode)))
+    (spacemacs|add-company-hook csharp-mode)))

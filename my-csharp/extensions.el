@@ -12,12 +12,12 @@
 (setq my-csharp-pre-extensions
       '(
         ;; pre extension names go here
-        omnisharp-custom
         ))
 
 (setq my-csharp-post-extensions
       '(
         ;; post extension names go here
+        omnisharp-dev
         ))
 
 ;; For each extension, define a function my-csharp/init-<extension-name>
@@ -30,5 +30,15 @@
 ;; For more info on `use-package', see readme:
 ;; https://github.com/jwiegley/use-package
 
-(defun my-csharp/omnisharp-custom()
-  (use-local-omnisharp-package-for-development))
+(defun my-csharp/init-omnisharp-dev()
+  (use-package omnisharp
+    :commands omnisharp-dev-start
+    :config
+      (setq omnisharp-debug t)
+      (setq omnisharp-server-executable-path
+          "/home/ian/code/omnisharp-roslyn/scripts/Omnisharp"))
+      ;;(load-file "/home/ian/code/omnisharp-emacs/test/buttercup-tests/setup.el"))
+    :init
+      (add-to-list 'load-path "/home/ian/code/omnisharp-emacs/")
+      (require 'omnisharp)
+      (use-omnisharp-package-for-development))

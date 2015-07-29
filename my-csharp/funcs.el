@@ -9,11 +9,11 @@
 ;;
 ;;; License: GPLv3
 
-(defun use-local-omnisharp-package-for-development()
-  (interactive)
-  (add-to-list 'load-path "/home/ian/code/omnisharp-emacs/")
-  (require 'omnisharp)
-  (setq omnisharp-debug t)
-  (setq omnisharp-server-executable-path
-        "/home/ian/code/omnisharp-roslyn/scripts/Omnisharp")
-  (load-file "/home/ian/code/omnisharp-emacs/test/buttercup-tests/setup.el"))
+;; (defun use-omnisharp-package-for-development()
+;;   (interactive)
+;;   (add-to-list 'load-path "/home/ian/code/omnisharp-emacs/")
+;;   (require 'omnisharp)
+;;   (setq omnisharp-debug t)
+;;   (setq omnisharp-server-executable-path
+;;         "/home/ian/code/omnisharp-roslyn/scripts/Omnisharp")
+;;   (load-file "/home/ian/code/omnisharp-emacs/test/buttercup-tests/setup.el"))
