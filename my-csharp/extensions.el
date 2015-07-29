@@ -41,7 +41,8 @@
       '(add-to-list 'company-backends 'company-omnisharp))))
 
 (defun my-csharp/post-init-omnisharp-emacs()
- (evil-leader/set-key-for-mode 'csharp-mode
+  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+  (evil-leader/set-key-for-mode 'csharp-mode
     ;; Compile
     "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
     ;; Solution/project manipulation
