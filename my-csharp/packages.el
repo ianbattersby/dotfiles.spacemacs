@@ -14,14 +14,14 @@
 (setq my-csharp-packages
     '(
       ;; package names go here
-      csharp-mode
+      flycheck
       company
-      omnisharp
       shut-up
       f
       s
       el-mock
       buttercup
+      csharp-mode
       ))
 
 ;; List of packages to exclude.
@@ -38,30 +38,38 @@
 ;; https://github.com/jwiegley/use-package
 
 (defun my-csharp/init-csharp-mode()
-  (use-package csharp-mode :defer nil))
+  (add-to-list 'load-path "/home/ian/code/omnisharp-emacs/")
+  (require 'flycheck)
+  (require 'omnisharp)
+  (require 'company-omnisharp)
+  (use-package csharp-mode :defer t))
 
-(defun my-csharp/init-shut-up()
-  (use-package shut-up :defer t))
-
-(defun my-csharp/init-f()
-  (use-package f :defer t))
-
-(defun my-csharp/init-s()
-  (use-package s :defer t))
-
-(defun my-csharp/init-el-mock()
-  (use-package el-mock :defer t))
-
-(defun my-csharp/init-buttercup()
-  (use-package buttercup :defer t))
-
-(defun my-csharp/init-omnisharp ()
-  ;; Load omnisharp-mode with csharp-mode, this should start the omnisharp server automatically
-  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+(defun my-csharp/post-init-csharp-mode()
   (use-package omnisharp
     :defer t
-    :init (push 'company-omnisharp company-backends-csharp-mode)
-    :config (evil-leader/set-key-for-mode 'csharp-mode
+    :init
+      (push 'company-omnisharp company-backends-csharp-mode)
+      (setq omnisharp-debug t)
+      (setq omnisharp-server-executable-path
+          "/home/ian/code/omnisharp-roslyn/scripts/Omnisharp")
+    :config
+      (add-hook 'csharp-mode-hook 'omnisharp-mode)
+      (add-hook 'omnisharp-mode-hook '(lambda() (interactive) (load-file "/home/ian/code/omnisharp-emacs/test/buttercup-tests/setup.el")))
+      (yas-minor-mode)
+      (omnisharp-mode)
+      (company-mode)
+      (flycheck-mode)
+      (linum-mode)
+      ;; (whole-line-or-region-mode)
+      ;; use flex matching for company
+      (electric-pair-mode)
+      (setq c-basic-offset 4) ; indents 4 chars
+      (setq tab-width 4)          ; and 4 char wide for TAB
+      (setq indent-tabs-mode nil) ; And force use of spaces
+      (setq eldoc-idle-delay 0.1
+            flycheck-display-errors-delay 0)
+      (turn-on-eldoc-mode)
+      (evil-leader/set-key-for-mode 'csharp-mode
               ;; Compile
               "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
               ;; Solution/project manipulation
@@ -100,6 +108,24 @@
               "mi" 'omnisharp-fix-usings
               "m=" 'omnisharp-code-format)))
 
+(defun my-csharp/init-shut-up()
+  (use-package shut-up :defer t))
+
+(defun my-csharp/init-f()
+  (use-package f :defer t))
+
+(defun my-csharp/init-s()
+  (use-package s :defer t))
+
+(defun my-csharp/init-el-mock()
+  (use-package el-mock :defer t))
+
+(defun my-csharp/init-buttercup()
+  (use-package buttercup :defer t))
+
+(defun my-csharp/init-flycheck()
+  (use-package flycheck :defer t))
+
 (when (configuration-layer/layer-usedp 'auto-completion)
-  (defun csharp/post-init-company ()
+  (defun my-csharp/post-init-company ()
     (spacemacs|add-company-hook csharp-mode)))
