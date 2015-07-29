@@ -1,4 +1,4 @@
-;;; config.el --- my-csharp Layer extensions File for Spacemacs
+;;; config.el --- my-csharp Layer config File for Spacemacs
 ;;
 ;; Copyright (c) 2015 Ian Battersby
 ;;
