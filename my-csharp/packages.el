@@ -21,6 +21,7 @@
       s
       el-mock
       buttercup
+      prodigy
       csharp-mode
       ))
 
@@ -58,6 +59,39 @@
 (defun my-csharp/init-flycheck()
   (use-package flycheck :defer t))
 
+(defun my-csharp/init-prodigy()
+  (use-package prodigy
+    :defer nil
+    :config
+    (def-omnisharp-service
+      "omnisharp-roslyn stdio"
+      "../../../../code/omnisharp-roslyn/scripts/Omnisharp"
+      '("-v" "-s" "test/MinimalSolution/" "--stdio"))
+
+    (def-omnisharp-service
+      "omnisharp-emacs integration tests"
+      "run-integration-tests.sh")
+
+    (def-omnisharp-service
+      "omnisharp-emacs unit tests"
+      "run-tests.sh")
+
+    (def-omnisharp-service
+      "omnisharp-emacs installation test"
+      "run-melpa-build-test.sh")))
+
 (when (configuration-layer/layer-usedp 'auto-completion)
   (defun my-csharp/post-init-company ()
     (spacemacs|add-company-hook csharp-mode)))
+
+(defmacro def-omnisharp-service (name command &optional args-to-command)
+  (let ((omni-dir "~/.spacemacs.layers/my-csharp/extensions/omnisharp-emacs/"))
+    `(prodigy-define-service
+       :name ,name
+       :args ,args-to-command
+       :command (concat ,omni-dir ,command)
+       :cwd ,omni-dir
+       :stop-signal 'kill
+       :kill-process-buffer-on-stop t
+       :truncate-output 200
+       :tags '(omnisharp))))
