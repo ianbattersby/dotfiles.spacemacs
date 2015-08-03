@@ -65,7 +65,7 @@
             "mht" 'omnisharp-current-type-information
             "mhT" 'omnisharp-current-type-information-to-kill-ring
             ;; Refactoring
-            "mrm" 'omnisharp-rename
+            "mrm" 'omnisharp-rename-interactively
             "mrr" 'omnisharp-run-code-action-refactoring
             ;; Server manipulation, inspired spacemacs REPL bindings since C# does not provice a REPL
             "mss" 'omnisharp-start-omnisharp-server
@@ -78,4 +78,82 @@
             ;; Code manipulation
             "mu" 'omnisharp-auto-complete-overrides
             "mi" 'omnisharp-fix-usings
-            "m=" 'omnisharp-code-format)))
+            "m=" 'omnisharp-code-format
+            "m." 'omnisharp-fix-code-issue-at-point)
+
+            (define-key company-active-map (kbd ".") (lambda() (interactive) (company-complete-selection-insert-key-and-complete '".")))
+            (define-key company-active-map (kbd "]") (lambda() (interactive) (company-complete-selection-insert-key-and-complete '"]")))
+            (define-key company-active-map (kbd "[") (lambda() (interactive) (company-complete-selection-insert-key '"[")))
+            (define-key company-active-map (kbd ")") (lambda() (interactive) (company-complete-selection-insert-key '")")))
+            (define-key company-active-map (kbd "<SPC>") nil)
+            (define-key company-active-map (kbd ";") (lambda() (interactive) (company-complete-selection-insert-key '";")))
+            (define-key company-active-map (kbd ">") (lambda() (interactive) (company-complete-selection-insert-key '">")))
+            (define-key omnisharp-mode-map (kbd "}") 'csharp-indent-function-on-closing-brace) 
+            (define-key omnisharp-mode-map (kbd "<RET>") 'csharp-newline-and-indent) 
+
+            (define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition)
+            (define-key omnisharp-mode-map (kbd "s-d") 'omnisharp-go-to-definition)
+            (define-key omnisharp-mode-map (kbd "S-s-<up>") 'omnisharp-navigate-up)
+            (define-key omnisharp-mode-map (kbd "S-s-<down>") 'omnisharp-navigate-down)
+            (define-key omnisharp-mode-map (kbd "S-<f12>") 'omnisharp-helm-find-usages)
+
+            (define-key omnisharp-mode-map (kbd "s-u") 'omnisharp-helm-find-usages)
+            (define-key omnisharp-mode-map (kbd "s-i") 'omnisharp-helm-find-implementations)
+            (define-key omnisharp-mode-map (kbd "S-s-<f12>") 'omnisharp-helm-find-usages)
+            (define-key omnisharp-mode-map (kbd "<M-RET>") 'omnisharp-run-code-action-refactoring)
+            (define-key omnisharp-mode-map (kbd "C-.") 'omnisharp-run-code-action-refactoring)
+
+            (define-key omnisharp-mode-map (kbd "C-k C-d") 'omnisharp-code-format)
+            (define-key omnisharp-mode-map (kbd "C-d") 'duplicate-current-line-or-region)
+
+            (define-key omnisharp-mode-map (kbd "<f2>") 'omnisharp-rename-interactively)
+            (define-key omnisharp-mode-map (kbd "<f5>") 'omnisharp-build-in-emacs)
+
+            (setq omnisharp-auto-complete-want-documentation nil)
+            (setq c-basic-offset 4) ; indents 4 chars
+            (setq tab-width 4)          ; and 4 char wide for TAB
+            (setq indent-tabs-mode nil) ; And force use of spaces
+            (setq eldoc-idle-delay 0.1
+                  flycheck-display-errors-delay 0)
+
+            (yas-minor-mode)
+            (company-mode)
+            (flycheck-mode)
+            (linum-mode)
+            (turn-on-eldoc-mode)))
+
+;; Company mode stuff
+(defun company-complete-selection-insert-key(company-key)
+  (company-complete-selection)
+  (insert company-key))
+
+(defun company-complete-selection-insert-key-and-complete(company-key)
+  (company-complete-selection-insert-key company-key)
+  (company-complete))
+
+(defun csharp-indent-function-on-closing-brace()
+  (interactive)
+  (insert "}")
+  (c-indent-defun))
+
+(defun csharp-newline-and-indent ()
+  "Open a newline and indent.
+If point is between a pair of braces, opens newlines to put braces
+on their own line."
+  (interactive)
+  (save-excursion
+    (save-match-data
+      (when (and
+             (looking-at " *}")
+             (save-match-data
+               (when (looking-back "{ *")
+                 (goto-char (match-beginning 0))
+                 (unless (looking-back "^[[:space:]]*")
+                   (newline-and-indent))
+                 t)))
+        (unless (and (boundp electric-pair-open-newline-between-pairs)
+                     electric-pair-open-newline-between-pairs
+                     electric-pair-mode)
+          (goto-char (match-beginning 0))
+          (newline-and-indent)))))
+  (newline-and-indent))
