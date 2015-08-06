@@ -14,13 +14,8 @@
 (setq my-csharp-packages
     '(
       ;; package names go here
-      flycheck
       company
       shut-up
-      f
-      s
-      el-mock
-      buttercup
       prodigy
       csharp-mode
       ))
@@ -39,25 +34,10 @@
 ;; https://github.com/jwiegley/use-package
 
 (defun my-csharp/init-csharp-mode()
-  (use-package csharp-mode :defer t))
+   (use-package csharp-mode :defer t))
 
 (defun my-csharp/init-shut-up()
-  (use-package shut-up :defer t))
-
-(defun my-csharp/init-f()
-  (use-package f :defer t))
-
-(defun my-csharp/init-s()
-  (use-package s :defer t))
-
-(defun my-csharp/init-el-mock()
-  (use-package el-mock :defer t))
-
-(defun my-csharp/init-buttercup()
-  (use-package buttercup :defer t))
-
-(defun my-csharp/init-flycheck()
-  (use-package flycheck :defer t))
+   (use-package shut-up :defer t))
 
 (defun my-csharp/init-prodigy()
   (use-package prodigy
