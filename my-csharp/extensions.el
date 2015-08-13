@@ -38,8 +38,8 @@
         (setq omnisharp-server-executable-path
              "~/code/omnisharp-roslyn/scripts/Omnisharp")
         (eval-after-load 'company
-           '(push 'company-omnisharp company-backends-csharp-mode))
-       :config
+          '(push 'company-omnisharp company-backends-csharp-mode))
+        :config
         (add-hook 'csharp-mode-hook 'omnisharp-mode)
         (evil-leader/set-key-for-mode 'csharp-mode
             ;; Compile
