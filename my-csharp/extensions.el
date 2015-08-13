@@ -41,6 +41,7 @@
           '(push 'company-omnisharp company-backends-csharp-mode))
         :config
         (add-hook 'csharp-mode-hook 'omnisharp-mode)
+        (add-hook 'csharp-mode-hook 'flycheck-mode)
         (evil-leader/set-key-for-mode 'csharp-mode
             ;; Compile
             "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
@@ -118,7 +119,6 @@
 
             (yas-minor-mode)
             (company-mode)
-            (flycheck-mode)
             (linum-mode)
             (eldoc-mode)))
 
