@@ -120,7 +120,7 @@
             (company-mode)
             (flycheck-mode)
             (linum-mode)
-            (turn-on-eldoc-mode)))
+            (eldoc-mode)))
 
 ;; Company mode stuff
 (defun company-complete-selection-insert-key(company-key)
