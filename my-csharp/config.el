@@ -12,3 +12,4 @@
 ;; variables
 
 (spacemacs|defvar-company-backends csharp-mode)
+;;(spacemacs|defvar-company-backends company-omnisharp)

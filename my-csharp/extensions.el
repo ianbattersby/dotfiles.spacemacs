@@ -39,6 +39,8 @@
              "~/code/omnisharp-roslyn/scripts/Omnisharp")
         (eval-after-load 'company
           '(push 'company-omnisharp company-backends-csharp-mode))
+        (evil-leader/set-key
+          "aso" 'omnisharp-start-omnisharp-server)
         :config
         (add-hook 'csharp-mode-hook 'omnisharp-mode)
         (add-hook 'csharp-mode-hook 'flycheck-mode)
