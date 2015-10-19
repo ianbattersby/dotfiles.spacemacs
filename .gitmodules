@@ -1,0 +1,3 @@
+[submodule "my-csharp/extensions/omnisharp-emacs"]
+	path = my-csharp/extensions/omnisharp-emacs
+	url = git@github.com:ianbattersby/omnisharp-emacs

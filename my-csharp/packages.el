@@ -39,7 +39,7 @@
 (defun my-csharp/init-shut-up()
    (use-package shut-up :defer t))
 
-(defun my-csharp/init-prodigy()
+(defun my-csharp/post-init-prodigy()
   (use-package prodigy
     :defer nil
     :config

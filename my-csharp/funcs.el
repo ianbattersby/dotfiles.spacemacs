@@ -10,4 +10,4 @@
 ;;; License: GPLv3
 (defun use-omnisharp-package-for-development()
   (interactive)
-  (load-file "/home/ian/code/dotfiles/emacs/spacemacs.layers.symlink/my-csharp/extensions/omnisharp-emacs/test/buttercup-tests/setup.el"))
+  (load-file (concatenate 'string (car dotspacemacs-configuration-layer-path) "/my-csharp/extensions/omnisharp-emacs/test/buttercup-tests/setup.el")))
