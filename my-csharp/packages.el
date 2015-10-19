@@ -13,11 +13,17 @@
 ;; which require an initialization must be listed explicitly in the list.
 (setq my-csharp-packages
     '(
-      ;; package names go here
+      ;; needed for core operation
       company
-      shut-up
+;;      shut-up
       prodigy
       csharp-mode
+
+      ;; needed for development mode
+      f
+      s
+      el-mock
+      buttercup
       ))
 
 ;; List of packages to exclude.
@@ -36,17 +42,34 @@
 (defun my-csharp/init-csharp-mode()
    (use-package csharp-mode :defer t))
 
-(defun my-csharp/init-shut-up()
-   (use-package shut-up :defer t))
+;;(defun my-csharp/init-shut-up()
+;;   (use-package shut-up :defer t))
+
+(defun my-csharp/init-f()
+  (use-package f))
+
+(defun my-csharp/init-s()
+  (use-package s))
+
+(defun my-csharp/init-el-mock()
+  (use-package el-mock))
+
+(defun my-csharp/init-buttercup()
+  (use-package buttercup))
 
 (defun my-csharp/post-init-prodigy()
   (use-package prodigy
     :defer nil
     :config
-    (def-omnisharp-service
-      "omnisharp-roslyn stdio"
-      "../../../../code/omnisharp-roslyn/scripts/Omnisharp"
-      '("-v" "-s" "test/MinimalSolution/" "--stdio"))
+    (prodigy-define-service
+       :name "omnisharp-roslyn stdio"
+       :args '("-v" "-s" "test/MinimalSolution/" "--stdio")
+       :command (expand-file-name omnisharp-load-script)
+       :cwd omnisharp-emacs-repo-path
+       :stop-signal 'kill
+       :kill-process-buffer-on-stop t
+       :truncate-output 200
+       :tags '(omnisharp))
 
     (def-omnisharp-service
       "omnisharp-emacs integration tests"
@@ -65,7 +88,7 @@
     (spacemacs|add-company-hook csharp-mode)))
 
 (defmacro def-omnisharp-service (name command &optional args-to-command)
-  (let ((omni-dir "~/.spacemacs.layers/my-csharp/extensions/omnisharp-emacs/"))
+  (let ((omni-dir omnisharp-emacs-repo-path))
     `(prodigy-define-service
        :name ,name
        :args ,args-to-command

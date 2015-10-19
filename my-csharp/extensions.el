@@ -35,13 +35,12 @@
   (use-package omnisharp
        :init
         (setq omnisharp-debug 't)
-        (setq omnisharp-server-executable-path
-             "~/code/omnisharp-roslyn/scripts/Omnisharp")
+        (setq omnisharp-server-executable-path (expand-file-name omnisharp-load-script))
         (eval-after-load 'company
           '(push 'company-omnisharp company-backends-csharp-mode))
         (evil-leader/set-key
-          "aso" 'omnisharp-start-omnisharp-server)
-        :config
+          "aO" 'omnisharp-start-omnisharp-server)
+       :config
         (add-hook 'csharp-mode-hook 'omnisharp-mode)
         (add-hook 'csharp-mode-hook 'flycheck-mode)
         (add-hook 'csharp-mode-hook 'eldoc-mode)
@@ -123,6 +122,9 @@
             (yas-minor-mode)
             (company-mode)
             (linum-mode)))
+            ;;(flycheck-mode))
+            ;;(linum-mode)
+            ;;(turn-on-eldoc-mode)))
 
 ;; Company mode stuff
 (defun company-complete-selection-insert-key(company-key)

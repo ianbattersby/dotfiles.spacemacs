@@ -12,4 +12,9 @@
 ;; variables
 
 (spacemacs|defvar-company-backends csharp-mode)
-;;(spacemacs|defvar-company-backends company-omnisharp)
+
+(defvar omnisharp-load-script (concat omnisharp-load-script "/omnisharp-roslyn/scripts/Omnisharp")
+  "Location of the omnisharp-roslyn load script.")
+
+(defvar omnisharp-emacs-repo-path (concatenate 'string (car dotspacemacs-configuration-layer-path) "/my-csharp/extensions/omnisharp-emacs/")
+  "Location of the omnisharp-emacs repository.")
