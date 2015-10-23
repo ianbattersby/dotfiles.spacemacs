@@ -69,11 +69,28 @@
        :stop-signal 'kill
        :kill-process-buffer-on-stop t
        :truncate-output 200
-       :tags '(omnisharp))
+       :tags '(omnisharp)
+       :on-output (lambda (&rest args)
+                    (let ((output (plist-get args :output))
+                          (service (plist-get args :service)))
+                      (when (s-matches? "\"Event\":\"started\"" output)
+                        (princ 'Omnisharp-roslyn\ stdio\ \(prodigy\)\ has\ started\.)
+                        (let ((process (plist-get service :process)))
+                          (omnisharp--handle-server-message process output)
+                          (setq omnisharp--server-info (make-omnisharp--server-info process)))))))
 
-    (def-omnisharp-service
-      "omnisharp-emacs integration tests"
-      "run-integration-tests.sh")
+    (prodigy-define-service
+      :name "omnisharp-emacs integration tests"
+      :command (lambda (&rest args)
+                 (let ((service (plist-get args :server))
+                       (process (get-process "omnisharp-roslyn stdio")))
+                   (load (f-join omnisharp-emacs-repo-path "test" "buttercup-tests" "setup.el") nil t)
+                   (setq omnisharp--server-info (make-omnisharp--server-info process))
+                   (dolist (file (f-entries (f-join omnisharp-emacs-repo-path "test" "buttercup-tests") (lambda (file) (s-matches? "-test.el" file)) t))
+                     (load file nil t))
+                   (buttercup-run)))
+      :cwd (f-join omnisharp-emacs-repo-path "test" "buttercup-tests")
+      :tags '(omnisharp))
 
     (def-omnisharp-service
       "omnisharp-emacs unit tests"
