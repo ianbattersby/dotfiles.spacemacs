@@ -70,13 +70,16 @@
        :kill-process-buffer-on-stop t
        :truncate-output 200
        :tags '(omnisharp)
+       :ready-message "FALSE_FIND"
        :on-output (lambda (&rest args)
                     (let ((output (plist-get args :output))
                           (service (plist-get args :service)))
-                      (when (s-matches? "\"Event\":\"started\"" output)
+                      (when (and (not (eq (plist-get service :status) 'ready)) (s-matches? "\"Event\":\"started\"" output))
+                        (prodigy-set-status service 'ready)
                         (princ 'Omnisharp-roslyn\ stdio\ \(prodigy\)\ has\ started\.)
                         (let ((process (plist-get service :process)))
                           (omnisharp--handle-server-message process output)
+                          (set-process-filter process 'omnisharp--handle-server-message)
                           (setq omnisharp--server-info (make-omnisharp--server-info process)))))))
 
     (prodigy-define-service
