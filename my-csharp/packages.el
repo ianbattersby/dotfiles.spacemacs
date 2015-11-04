@@ -61,29 +61,46 @@
   (use-package prodigy
     :defer nil
     :config
-    (prodigy-define-service
-       :name "omnisharp-roslyn stdio"
-       :args '("-v" "-s" "test/MinimalSolution/" "--stdio")
+    (prodigy-define-tag
+       :name 'omnisharp
        :command (expand-file-name omnisharp-load-script)
-       :cwd omnisharp-emacs-repo-path
        :stop-signal 'kill
        :kill-process-buffer-on-stop t
        :truncate-output 200
-       :tags '(omnisharp)
        :ready-message "FALSE_FIND"
        :on-output (lambda (&rest args)
                     (let ((output (plist-get args :output))
                           (service (plist-get args :service)))
-                      (when (and (not (eq (plist-get service :status) 'ready)) (s-matches? "\"Event\":\"started\"" output))
-                        (prodigy-set-status service 'ready)
-                        (princ 'Omnisharp-roslyn\ stdio\ \(prodigy\)\ has\ started\.)
-                        (let ((process (plist-get service :process)))
-                          (omnisharp--handle-server-message process output)
-                          (set-process-filter process 'omnisharp--handle-server-message)
-                          (setq omnisharp--server-info (make-omnisharp--server-info process)))))))
+                      (let ((process (plist-get service :process))
+                            (status (plist-get service :status)))
+                        (when (and (not (eq status 'ready)) (s-matches? "\"Event\":\"started\"" output))
+                          (prodigy-set-status service 'ready)
+                          (princ 'Omnisharp-roslyn\ stdio\ \(prodigy\)\ has\ started\.)
+                          (setq omnisharp--server-info (make-omnisharp--server-info process)))
+                        (when (and (eq (plist-get service :status) 'ready) (not (eq output "")))
+                          (omnisharp--handle-server-message-internal
+                           process
+                           output
+                           (lambda (p o) (--filter (/= (length it) 0) (split-string o "\n")))))))))
 
     (prodigy-define-service
-      :name "omnisharp-emacs integration tests"
+      :name "[*] omnisharp-roslyn"
+      :cwd (expand-file-name "~/code/omnisharp-roslyn")
+      :args '("-s" "./" "--stdio")
+      :tags '(omnisharp))
+
+    (prodigy-define-service
+      :name "[*] omnisharp-emacs/minimal"
+      :cwd omnisharp-emacs-repo-path
+      :args '("-v" "-s" "test/MinimalSolution/" "--stdio")
+      :tags '(omnisharp))
+
+    (def-omnisharp-service
+      "[omnisharp-emacs] unit tests"
+      "run-tests.sh")
+
+    (prodigy-define-service
+      :name "[omnisharp-emacs] integration tests"
       :command (lambda (&rest args)
                  (let ((service (plist-get args :server))
                        (process (get-process "omnisharp-roslyn stdio")))
@@ -96,11 +113,7 @@
       :tags '(omnisharp))
 
     (def-omnisharp-service
-      "omnisharp-emacs unit tests"
-      "run-tests.sh")
-
-    (def-omnisharp-service
-      "omnisharp-emacs installation test"
+      "[omnisharp-emacs] installation test"
       "run-melpa-build-test.sh")))
 
 (when (configuration-layer/layer-usedp 'auto-completion)
