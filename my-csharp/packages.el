@@ -94,7 +94,7 @@
     (prodigy-define-service
       :name "[*] omnisharp-emacs/minimal"
       :cwd omnisharp-emacs-repo-path
-      :args '("-v" "-s" "test/MinimalSolution/" "--stdio")
+      :args '( "-s" "test/MinimalSolution/" "--stdio" "-v")
       :tags '(omnisharp))
 
     (def-omnisharp-service
