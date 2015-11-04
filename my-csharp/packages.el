@@ -76,7 +76,9 @@
                         (when (and (not (eq status 'ready)) (s-matches? "\"Event\":\"started\"" output))
                           (prodigy-set-status service 'ready)
                           (princ 'Omnisharp-roslyn\ stdio\ \(prodigy\)\ has\ started\.)
-                          (setq omnisharp--server-info (make-omnisharp--server-info process)))
+                          (setq omnisharp--server-info (make-omnisharp--server-info process))
+                          (setq omnisharp--change-queue '())
+                          (save-some-buffers 't `(lambda() (string-equal (file-name-extension (buffer-name)) "cs"))))
                         (when (and (eq (plist-get service :status) 'ready) (not (eq output "")))
                           (omnisharp--handle-server-message-internal
                            process
