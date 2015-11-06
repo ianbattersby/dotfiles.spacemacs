@@ -125,6 +125,7 @@
 
             (yas-minor-mode)
             (company-mode)
+            (electric-pair-mode)
             (linum-mode)))
             ;;(flycheck-mode))
             ;;(linum-mode)
