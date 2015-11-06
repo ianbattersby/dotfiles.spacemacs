@@ -50,6 +50,7 @@
         (evil-leader/set-key-for-mode 'csharp-mode
             ;; Compile
             "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
+            "mcr" 'recompile
             ;; Solution/project manipulation
             "mfa" 'omnisharp-add-to-solution-current-file
             "mfA" 'omnisharp-add-to-solution-dired-selected-files
