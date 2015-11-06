@@ -44,6 +44,9 @@
         (add-hook 'csharp-mode-hook 'omnisharp-mode)
         (add-hook 'csharp-mode-hook 'flycheck-mode)
         (add-hook 'csharp-mode-hook 'eldoc-mode)
+        (add-hook 'js-mode-hook 
+                  (lambda () 
+                    (add-hook 'after-save-hook 'omnisharp-notify-file-changed)))
         (evil-leader/set-key-for-mode 'csharp-mode
             ;; Compile
             "mcc" 'omnisharp-build-in-emacs ;; Only one compile command so use top-level
@@ -161,3 +164,12 @@ on their own line."
           (goto-char (match-beginning 0))
           (newline-and-indent)))))
   (newline-and-indent))
+
+(defun omnisharp-notify-file-changed ()
+  (interactive)
+  (if (string-equal (file-name-nondirectory buffer-file-name) "project.json")
+      (omnisharp-post-message-curl-as-json
+       (concat (omnisharp-get-host) "filesChanged") 
+       (list (omnisharp--get-common-params))
+       )))
+
