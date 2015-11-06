@@ -79,9 +79,9 @@
             "msS" 'omnisharp-stop-server
             "msr" 'omnisharp-reload-solution
             ;; Tests
-            "mta" 'omnisharp-unit-test-all
+            "mta" (lambda() (interactive) (omnisharp-unit-test "all")) ;;'omnisharp-unit-test-all
             "mtb" 'omnisharp-unit-test-fixture
-            "mtt" 'omnisharp-unit-test-single
+            "mtt" (lambda() (interactive) (omnisharp-unit-test "single")) ;;'omnisharp-unit-test-single
             ;; Code manipulation
             "mu" 'omnisharp-auto-complete-overrides
             "mi" 'omnisharp-fix-usings
@@ -174,3 +174,17 @@ on their own line."
        (list (omnisharp--get-common-params))
        )))
 
+(defun omnisharp-unit-test (mode)
+  "Run tests after building the solution. Mode should be one of 'single', 'fixture' or 'all'" 
+  (interactive)
+  (let ((test-response
+         (omnisharp-post-message-curl-as-json
+          (concat (omnisharp-get-host) "gettestcontext") 
+          (cons `("Type" . ,mode) (omnisharp--get-common-params)))))
+    (let ((test-command
+           (cdr (assoc 'TestCommand test-response)))
+
+          (test-directory
+           (cdr (assoc 'Directory test-response))))
+      (cd test-directory)
+      (compile test-command))))
