@@ -66,7 +66,7 @@
        :command (expand-file-name omnisharp-load-script)
        :stop-signal 'kill
        :kill-process-buffer-on-stop t
-       :truncate-output 200
+       :truncate-output 1024
        :ready-message "FALSE_FIND"
        :on-output (lambda (&rest args)
                     (let ((output (plist-get args :output))
@@ -80,10 +80,14 @@
                           (setq omnisharp--change-queue '())
                           (save-some-buffers 't `(lambda() (string-equal (file-name-extension (buffer-name)) "cs"))))
                         (when (and (eq (plist-get service :status) 'ready) (not (eq output "")))
-                          (omnisharp--handle-server-message-internal
-                           process
-                           output
-                           (lambda (p o) (--filter (/= (length it) 0) (split-string o "\n")))))))))
+                          (if (string-match "}\n$" output)
+                              (progn
+                                (omnisharp--handle-server-message-internal
+                                 process
+                                 (concat omnisharp--temporary-buffer output)
+                                 (lambda (p o) (--filter (/= (length it) 0) (split-string o "\n"))))
+                            (setq omnisharp--temporary-buffer nil))
+                            (setq omnisharp--temporary-buffer (concat omnisharp--temporary-buffer output))))))))
 
     (prodigy-define-service
       :name "[*] omnisharp-roslyn"

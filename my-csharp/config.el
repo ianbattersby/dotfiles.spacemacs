@@ -18,3 +18,7 @@
 
 (defvar omnisharp-emacs-repo-path (concatenate 'string (car dotspacemacs-configuration-layer-path) "/my-csharp/extensions/omnisharp-emacs/")
   "Location of the omnisharp-emacs repository.")
+
+;; This is a really bad idea but in verbose mode the responses can be huge :'(
+(defvar omnisharp--temporary-buffer nil
+  "Temporary buffer for when responses are split.")
