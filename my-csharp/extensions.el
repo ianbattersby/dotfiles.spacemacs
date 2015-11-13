@@ -96,7 +96,7 @@
             (define-key company-active-map (kbd ";") (lambda() (interactive) (company-complete-selection-insert-key '";")))
             (define-key company-active-map (kbd ">") (lambda() (interactive) (company-complete-selection-insert-key '">")))
             (define-key omnisharp-mode-map (kbd "}") 'csharp-indent-function-on-closing-brace) 
-            (define-key omnisharp-mode-map (kbd "<RET>") 'csharp-newline-and-indent) 
+            ;;(define-key omnisharp-mode-map (kbd "<RET>") 'csharp-newline-and-indent) 
 
             (define-key omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition)
             (define-key omnisharp-mode-map (kbd "s-d") 'omnisharp-go-to-definition)
