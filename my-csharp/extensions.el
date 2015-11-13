@@ -42,8 +42,8 @@
           "aO" 'omnisharp-start-omnisharp-server)
        :config
         (add-hook 'csharp-mode-hook 'omnisharp-mode)
-        (add-hook 'csharp-mode-hook 'flycheck-mode)
-        (add-hook 'csharp-mode-hook 'eldoc-mode)
+        ;;(add-hook 'csharp-mode-hook 'flycheck-mode)
+        ;;(add-hook 'csharp-mode-hook 'eldoc-mode)
         (add-hook 'js-mode-hook 
                   (lambda () 
                     (add-hook 'after-save-hook 'omnisharp-notify-file-changed)))

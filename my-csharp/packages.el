@@ -18,6 +18,8 @@
 ;;      shut-up
       prodigy
       csharp-mode
+      flycheck
+      eldoc
 
       ;; needed for development mode
       f
@@ -56,6 +58,12 @@
 
 (defun my-csharp/init-buttercup()
   (use-package buttercup))
+
+(defun my-csharp/post-init-flycheck()
+  (spacemacs/add-flycheck-hook 'csharp-mode))
+
+(defun my-csharp/post-init-eldoc()
+  (add-hook 'csharp-mode-hook 'eldoc-mode))
 
 (defun my-csharp/post-init-prodigy()
   (use-package prodigy
