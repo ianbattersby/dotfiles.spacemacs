@@ -59,6 +59,12 @@
 (defun my-csharp/init-buttercup()
   (use-package buttercup))
 
+(defun my-csharp/post-init-buttercup()
+  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
+    (evil-leader/set-key-for-mode mode
+      "mtp" 'buttercup-run-at-point
+      "mtr" 'buttercup-run)))
+
 (defun my-csharp/post-init-flycheck()
   (spacemacs/add-flycheck-hook 'csharp-mode))
 
@@ -105,8 +111,11 @@
 
     (prodigy-define-service
       :name "[*] omnisharp-emacs/minimal"
+      :command (lambda ()
+                 (use-omnisharp-package-for-development)
+                 (expand-file-name omnisharp-load-script))
       :cwd omnisharp-emacs-repo-path
-      :args '( "-s" "test/MinimalSolution/" "--stdio" "-v")
+      :args '( "-s" "/users/ibattersby/.spacemacs.layers/my-csharp/extensions/omnisharp-emacs/test/MinimalSolution/" "--stdio" "-v")
       :tags '(omnisharp))
 
     (def-omnisharp-service
@@ -119,7 +128,7 @@
                  (let ((service (plist-get args :server))
                        (process (get-process "omnisharp-roslyn stdio")))
                    (load (f-join omnisharp-emacs-repo-path "test" "buttercup-tests" "setup.el") nil t)
-                   (setq omnisharp--server-info (make-omnisharp--server-info process))
+                   ;;(setq omnisharp--server-info (make-omnisharp--server-info process))
                    (dolist (file (f-entries (f-join omnisharp-emacs-repo-path "test" "buttercup-tests") (lambda (file) (s-matches? "-test.el" file)) t))
                      (load file nil t))
                    (buttercup-run)))
