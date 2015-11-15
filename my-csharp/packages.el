@@ -133,11 +133,11 @@
                      (load file nil t))
                    (buttercup-run)))
       :cwd (f-join omnisharp-emacs-repo-path "test" "buttercup-tests")
-      :tags '(omnisharp))
+      :tags '(omnisharp))))
 
-    (def-omnisharp-service
-      "[omnisharp-emacs] installation test"
-      "run-melpa-build-test.sh")))
+    ;; (def-omnisharp-service
+    ;;   "[omnisharp-emacs] installation test"
+    ;;   "run-melpa-build-test.sh")))
 
 (when (configuration-layer/layer-usedp 'auto-completion)
   (defun my-csharp/post-init-company ()
