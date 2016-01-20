@@ -57,13 +57,14 @@
   (use-package el-mock))
 
 (defun my-csharp/init-buttercup()
-  (use-package buttercup))
+  (use-package buttercup
+    :defer nil))
 
 (defun my-csharp/post-init-buttercup()
   (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
     (evil-leader/set-key-for-mode mode
-      "mtp" 'buttercup-run-at-point
-      "mtr" 'buttercup-run)))
+      "tp" 'buttercup-run-at-point
+      "ts" (lambda () (interactive) (buttercup-run)))))
 
 (defun my-csharp/post-init-flycheck()
   (spacemacs/add-flycheck-hook 'csharp-mode))
